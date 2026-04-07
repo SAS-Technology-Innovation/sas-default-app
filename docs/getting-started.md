@@ -1,0 +1,88 @@
+# Getting Started
+
+## Prerequisites
+
+- **Node.js 22+** - Use [nvm](https://github.com/nvm-sh/nvm) and run `nvm install` in the project root
+- **pnpm 9+** - Enable via `corepack enable pnpm`
+
+## Using the Template
+
+1. Click "Use this template" on GitHub (or clone directly)
+2. Clone your new repository
+3. Install dependencies:
+
+```bash
+pnpm install
+```
+
+## First-Time Setup
+
+### Environment Variables
+
+```bash
+cp apps/web/.env.local.example apps/web/.env.local
+```
+
+Edit `apps/web/.env.local`:
+
+```env
+AUTH_SECRET=<generate with: openssl rand -base64 32>
+AUTH_URL=http://localhost:3000
+```
+
+### Start Development
+
+```bash
+pnpm dev
+```
+
+Open [http://localhost:3000](http://localhost:3000).
+
+## Renaming the Project
+
+Update the `name` field in these files:
+
+1. `package.json` (root) - change `next-template` to your project name
+2. `apps/web/package.json` - change `web` to your app name
+3. `apps/web/lib/constants.ts` - update `APP_NAME` and `APP_DESCRIPTION`
+
+## Adding Your First shadcn Component
+
+```bash
+npx shadcn@latest add card
+```
+
+Then use it:
+
+```tsx
+import {
+  Card,
+  CardHeader,
+  CardTitle,
+  CardContent,
+} from "@workspace/ui/components/card"
+```
+
+## Authentication
+
+The template includes NextAuth with a placeholder Credentials provider. To connect your auth backend:
+
+1. Edit `apps/web/lib/auth.ts`
+2. Replace the `authorize` function with your actual authentication logic
+3. The JWT session strategy means no database is required for sessions
+
+## Deployment
+
+### Vercel
+
+1. Import the monorepo on [vercel.com](https://vercel.com)
+2. Set the root directory to `apps/web`
+3. Set build command: `cd ../.. && pnpm build --filter web`
+4. Set the required environment variables (`AUTH_SECRET`, `AUTH_URL`)
+
+### Environment Variables for Production
+
+| Variable      | Description                                             |
+| ------------- | ------------------------------------------------------- |
+| `AUTH_SECRET` | Random secret for JWT signing (required)                |
+| `AUTH_URL`    | Full URL of your app (e.g., `https://myapp.vercel.app`) |
