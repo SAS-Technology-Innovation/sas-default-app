@@ -4,7 +4,7 @@
   "type": "module",
   "private": true,
   "scripts": {
-    "dev": "next dev --turbopack",
+    "dev": "next dev --turbopack --port 11000",
     "build": "next build",
     "start": "next start",
     "lint": "eslint",
@@ -12,18 +12,26 @@
     "format:check": "prettier --check --ignore-path ../../.prettierignore \"**/*.{ts,tsx}\"",
     "typecheck": "tsc --noEmit",
     "test": "vitest run",
-    "test:watch": "vitest"
+    "test:watch": "vitest",
+    "db:generate": "drizzle-kit generate",
+    "db:push": "drizzle-kit push",
+    "db:studio": "drizzle-kit studio"
   },
   "dependencies": {
+    "@auth/drizzle-adapter": "^1.11.1",
+    "@libsql/client": "^0.17.2",
     "@workspace/accessibility": "workspace:*",
     "@workspace/ai-safety": "workspace:*",
     "@workspace/ui": "workspace:*",
+    "drizzle-orm": "^0.45.2",
     "lucide-react": "^1.7.0",
     "next": "16.1.6",
     "next-auth": "5.0.0-beta.30",
     "next-themes": "^0.4.6",
+    "nodemailer": "^7.0.13",
     "react": "^19.2.4",
-    "react-dom": "^19.2.4"
+    "react-dom": "^19.2.4",
+    "resend": "^6.10.0"
   },
   "devDependencies": {
     "@tailwindcss/postcss": "^4.1.18",
@@ -31,11 +39,13 @@
     "@testing-library/react": "^16.3.2",
     "@testing-library/user-event": "^14.6.1",
     "@types/node": "^25.1.0",
+    "@types/nodemailer": "^8.0.0",
     "@types/react": "^19.2.10",
     "@types/react-dom": "^19.2.3",
     "@vitejs/plugin-react": "^6.0.1",
     "@workspace/eslint-config": "workspace:*",
     "@workspace/typescript-config": "workspace:*",
+    "drizzle-kit": "^0.31.10",
     "eslint": "^9.39.2",
     "jsdom": "^29.0.2",
     "typescript": "^5.9.3",

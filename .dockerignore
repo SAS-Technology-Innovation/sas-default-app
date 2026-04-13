@@ -1,0 +1,12 @@
+node_modules
+.next
+.turbo
+.git
+.github
+.env*
+*.db
+*.db-journal
+*.db-wal
+*.db-shm
+coverage
+.DS_Store

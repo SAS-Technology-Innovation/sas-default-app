@@ -1,0 +1,15 @@
+services:
+  web:
+    build: .
+    ports:
+      - "11000:11000"
+    restart: unless-stopped
+    volumes:
+      # Single persistent volume for SQLite DB + saved credentials
+      - app-data:/app/data
+    environment:
+      - DATABASE_URL=file:/app/data/app.db
+      - AUTH_URL=http://localhost:11000
+
+volumes:
+  app-data:

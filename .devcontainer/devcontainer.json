@@ -1,0 +1,31 @@
+{
+  "name": "MiniApp Dev",
+  "image": "mcr.microsoft.com/devcontainers/javascript-node:22",
+  "features": {
+    "ghcr.io/devcontainers/features/docker-in-docker:2": {}
+  },
+  "postCreateCommand": "corepack enable && pnpm install",
+  "postStartCommand": "pnpm db:push",
+  "forwardPorts": [11000],
+  "portsAttributes": {
+    "11000": { "label": "App", "onAutoForward": "openBrowser" }
+  },
+  "customizations": {
+    "vscode": {
+      "settings": {
+        "editor.defaultFormatter": "esbenp.prettier-vscode",
+        "editor.formatOnSave": true,
+        "editor.codeActionsOnSave": {
+          "source.fixAll.eslint": "explicit"
+        },
+        "typescript.tsdk": "node_modules/typescript/lib"
+      },
+      "extensions": [
+        "dbaeumer.vscode-eslint",
+        "esbenp.prettier-vscode",
+        "bradlc.vscode-tailwindcss",
+        "ms-vscode.vscode-typescript-next"
+      ]
+    }
+  }
+}

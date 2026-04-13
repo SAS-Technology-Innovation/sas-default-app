@@ -1,400 +1,238 @@
-# SAS Default App
+# MiniApp Template
 
-A production-ready Next.js monorepo template for bootstrapping new projects. Clone it, swap out the placeholder auth, and start building.
+Build your own app. No coding experience required to get started.
 
-This template gives you a layered architecture with authentication, AI safety guardrails, APCA AAA 3.0 accessibility, error boundaries, and comprehensive tooling — all wired together and passing CI from day one.
+## Get Running in 3 Steps
 
-## Tech Stack
+### Step 1: Install Docker Desktop (one-time)
 
-| Category      | Technology                                                       |
-| ------------- | ---------------------------------------------------------------- |
-| Framework     | Next.js 16 (App Router, React Server Components, Turbopack)      |
-| UI            | shadcn/ui + Radix UI + Tailwind CSS v4 (OKLCH color tokens)      |
-| Auth          | NextAuth v5 (JWT sessions, Credentials provider, no DB required) |
-| AI Safety     | Rate limiting, prompt injection detection, PII redaction         |
-| Accessibility | APCA AAA 3.0 contrast algorithm, skip links, focus management    |
-| Monorepo      | Turborepo + pnpm workspaces                                      |
-| Testing       | Vitest + Testing Library + jsdom                                 |
-| CI/CD         | GitHub Actions + Husky + lint-staged                             |
-| Language      | TypeScript 5.9 (strict mode)                                     |
+Docker is a free app that runs your project in an isolated container.
 
-## Quick Start
+| System      | Install Link                                                                                    |
+| ----------- | ----------------------------------------------------------------------------------------------- |
+| **Mac**     | [Download Docker Desktop for Mac](https://docs.docker.com/desktop/install/mac-install/)         |
+| **Windows** | [Download Docker Desktop for Windows](https://docs.docker.com/desktop/install/windows-install/) |
+| **Linux**   | [Docker Desktop for Linux](https://docs.docker.com/desktop/install/linux/)                      |
 
-### Prerequisites
+Install it, open it, and wait for the whale icon to stop animating. That means Docker is ready.
 
-- **Node.js 22+** (see `.nvmrc` — use `nvm use` to switch)
-- **pnpm 9+** (enabled via corepack: `corepack enable pnpm`)
+### Step 2: Download This Project
 
-### Setup
+**Option A — Click the green "Code" button** on GitHub, then **"Download ZIP"**. Unzip it anywhere.
+
+**Option B — Clone with Git** (if you have it):
 
 ```bash
-# 1. Clone the template
-git clone https://github.com/SAS-Technology-Innovation/sas-default-app.git my-project
-cd my-project
+git clone https://github.com/SAS-Technology-Innovation/sas-default-app.git
+cd sas-default-app
+```
 
-# 2. Install dependencies
+### Step 3: Start the App
+
+Open a terminal in the project folder and run:
+
+```bash
+./start.sh
+```
+
+> **Windows?** Open PowerShell in the folder and run: `docker compose up -d --build`
+
+The first build takes a few minutes. After that, your browser opens to **http://localhost:11000** and the app walks you through setting up authentication.
+
+That's it. You're running.
+
+---
+
+## Setting Up Authentication
+
+When you first open the app, you'll see a setup screen. Choose one or both:
+
+| Method           | What You Need                                                                                     | Best For                                                                     |
+| ---------------- | ------------------------------------------------------------------------------------------------- | ---------------------------------------------------------------------------- |
+| **Google OAuth** | Client ID + Secret from [Google Cloud Console](https://console.cloud.google.com/apis/credentials) | Google Workspace schools — students sign in with their school Google account |
+| **Email OTP**    | API key from [Resend](https://resend.com/api-keys)                                                | Any email address — users get a 6-digit code                                 |
+
+Enter your credentials in the modal, click **Save and start**, and the app restarts with authentication live.
+
+### Google OAuth Setup (recommended for schools)
+
+1. Go to [Google Cloud Console](https://console.cloud.google.com/apis/credentials)
+2. Create an **OAuth 2.0 Client ID** (Web application)
+3. Add this as an **Authorized redirect URI**: `http://localhost:11000/api/auth/callback/google`
+4. Copy the **Client ID** and **Client Secret** into the app's setup modal
+
+---
+
+## Editing the Code (VS Code)
+
+Want to customize the app? Open it in VS Code:
+
+### Option A: Dev Container (recommended)
+
+1. Install [VS Code](https://code.visualstudio.com/) and the [Dev Containers extension](https://marketplace.visualstudio.com/items?itemName=ms-remote.remote-containers)
+2. Open the project folder in VS Code
+3. When prompted, click **"Reopen in Container"**
+4. VS Code builds a development environment with everything pre-installed
+5. Open the terminal in VS Code and run:
+   ```bash
+   pnpm dev
+   ```
+6. Open **http://localhost:11000** — changes you make to the code appear instantly
+
+### Option B: Local setup (if you prefer)
+
+Requires [Node.js 22+](https://nodejs.org/) and pnpm:
+
+```bash
+corepack enable pnpm
 pnpm install
-
-# 3. Set up environment variables
 cp apps/web/.env.local.example apps/web/.env.local
-# Generate a secret:
-openssl rand -base64 32
-# Paste it as the AUTH_SECRET value in apps/web/.env.local
-
-# 4. Start the dev server
+# Edit apps/web/.env.local with your credentials
 pnpm dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000). The landing page is public. Navigating to `/dashboard` will redirect you to `/login` (auth is required). The placeholder auth accepts any non-empty email and password.
+---
 
-### Using as a GitHub Template
+## Everyday Commands
 
-1. Click **"Use this template"** on the GitHub repo page
-2. Name your new repository
-3. Clone your new repo and follow steps 2-4 above
-4. Search for `sas-default-app` across `package.json` files and rename to your project name
-5. Update `APP_NAME` in `apps/web/lib/constants.ts`
-6. Replace the placeholder `authorize` function in `apps/web/lib/auth.ts` with your actual auth backend
+| What                      | Command                  |
+| ------------------------- | ------------------------ |
+| Start the app (Docker)    | `./start.sh`             |
+| Stop the app              | `docker compose down`    |
+| View logs                 | `docker compose logs`    |
+| Start fresh (wipe data)   | `docker compose down -v` |
+| Start dev server (coding) | `pnpm dev`               |
+| Run tests                 | `pnpm test`              |
+| Check for errors          | `pnpm typecheck`         |
 
-## Project Structure
+---
+
+## What's Inside
+
+This template gives you a working app with:
+
+- **Authentication** — Google sign-in and/or email one-time codes
+- **Database** — SQLite, runs locally inside the container
+- **AI Safety** — Rate limiting, content moderation, PII redaction (for AI features)
+- **Accessibility** — APCA AAA 3.0 contrast checking, keyboard navigation, screen reader support
+- **Dark mode** — Press `d` to toggle
+
+### Project Layout
 
 ```
-.
-├── apps/
-│   └── web/                              # Next.js 16 application
-│       ├── app/
-│       │   ├── (auth)/login/page.tsx     # Public login page
-│       │   ├── (dashboard)/              # Protected route group (requires auth)
-│       │   │   └── dashboard/page.tsx    # /dashboard page
-│       │   ├── api/auth/[...nextauth]/   # NextAuth API routes
-│       │   ├── error.tsx                 # Root error boundary
-│       │   ├── global-error.tsx          # Layout-level error boundary
-│       │   ├── not-found.tsx             # 404 page
-│       │   ├── loading.tsx               # Root loading skeleton
-│       │   ├── layout.tsx                # Root layout (providers, fonts, a11y)
-│       │   └── page.tsx                  # Landing page (public)
-│       ├── components/
-│       │   ├── providers.tsx             # Provider composition root
-│       │   ├── error-boundary.tsx        # Reusable client error boundary
-│       │   └── theme-provider.tsx        # Dark/light mode
-│       ├── lib/
-│       │   ├── auth.ts                   # NextAuth config (placeholder authorize)
-│       │   ├── auth-guard.ts             # Server-side requireAuth() helper
-│       │   └── constants.ts              # App name, route constants
-│       ├── hooks/use-session.ts          # Typed session hook
-│       ├── middleware.ts                 # Route protection
-│       ├── __tests__/                    # Co-located tests
-│       └── vitest.config.ts
-├── packages/
-│   ├── ui/                               # Shared shadcn/ui component library
-│   │   └── src/
-│   │       ├── components/               # Button, etc. (CVA variants)
-│   │       ├── lib/utils.ts              # cn() class merge utility
-│   │       └── styles/globals.css        # Tailwind v4 + design tokens
-│   ├── ai-safety/                        # AI safety guardrails package
-│   │   └── src/
-│   │       ├── guardrails/               # Rate limiter, input sanitizer, output filter, token budget
-│   │       ├── moderation/               # Content safety, PII redactor
-│   │       └── middleware/               # Composed safety pipeline
-│   ├── accessibility/                    # APCA AAA 3.0 accessibility package
-│   │   └── src/
-│   │       ├── apca/                     # Contrast calculation + validation
-│   │       ├── components/               # SkipLink, VisuallyHidden, LiveRegion
-│   │       ├── hooks/                    # useReducedMotion, useFocusTrap, useAnnounce
-│   │       └── utils/                    # Color conversion, focus management
-│   ├── eslint-config/                    # Shared ESLint configs
-│   └── typescript-config/                # Shared TypeScript configs
-├── turbo.json                            # Turborepo pipeline config
-├── pnpm-workspace.yaml                   # Workspace definition
-├── .github/workflows/ci.yml             # CI pipeline
-└── CLAUDE.md                             # AI assistant context file
+apps/web/                 # Your app lives here
+  app/
+    (auth)/login/         # Login page (auto-configured)
+    (dashboard)/          # Protected pages (require sign-in)
+    api/                  # API routes
+  lib/
+    auth.ts               # Authentication config
+    db/                   # Database schema + client
+
+packages/
+  ui/                     # Reusable UI components (buttons, dialogs, etc.)
+  ai-safety/              # AI guardrails (use when adding AI features)
+  accessibility/          # Accessibility utilities
 ```
 
-## Available Scripts
+### Adding a New Page
 
-All scripts run through Turborepo and execute across all workspaces:
-
-```bash
-pnpm dev            # Start dev server with Turbopack (localhost:3000)
-pnpm build          # Build all workspaces
-pnpm typecheck      # Type check all workspaces
-pnpm lint           # Lint all workspaces (ESLint)
-pnpm test           # Run all tests (Vitest)
-pnpm format         # Format all code (Prettier)
-pnpm format:check   # Check formatting without modifying files
-```
-
-To target a single workspace:
-
-```bash
-pnpm --filter web dev
-pnpm --filter web test
-pnpm --filter @workspace/ai-safety typecheck
-```
-
-## Authentication
-
-### How It Works
-
-Authentication uses **NextAuth v5** with JWT sessions — no database required for session storage.
-
-- **Middleware** (`apps/web/middleware.ts`) runs `auth()` on every request and redirects unauthenticated users to `/login`
-- **Route groups** separate public routes `(auth)` from protected routes `(dashboard)`
-- **Server-side auth** via `requireAuth()` in server components
-- **Client-side auth** via `useSession()` hook in client components
-
-### What You Need to Change
-
-The `authorize` function in `apps/web/lib/auth.ts` is a **placeholder** that accepts any non-empty email/password. Before deploying, you must replace it with your actual authentication logic:
-
-```typescript
-// apps/web/lib/auth.ts — replace the authorize function
-async authorize(credentials) {
-  const email = credentials?.email as string | undefined
-  const password = credentials?.password as string | undefined
-
-  if (!email || !password) return null
-
-  // TODO: Replace with your auth backend
-  // Example: const user = await db.user.findUnique({ where: { email } })
-  // Example: const valid = await bcrypt.compare(password, user.passwordHash)
-  return { id: "1", email, name: email.split("@")[0] }
-}
-```
-
-### Adding Protected Routes
+Create a file in `apps/web/app/(dashboard)/your-page/page.tsx`:
 
 ```tsx
-// apps/web/app/(dashboard)/your-route/page.tsx
 import { requireAuth } from "@/lib/auth-guard"
 
 export default async function YourPage() {
-  const session = await requireAuth() // redirects to /login if unauthenticated
-  return <div>Hello {session.user?.name}</div>
+  const session = await requireAuth()
+  return <div>Hello {session.user?.name}!</div>
 }
 ```
 
-Any page inside the `(dashboard)` route group is automatically protected by middleware. Use `requireAuth()` in server components to access the session.
+Pages inside `(dashboard)/` automatically require sign-in.
 
-### Adding Public Routes
-
-Place pages under `apps/web/app/(auth)/` or directly under `apps/web/app/`. Update the middleware matcher in `apps/web/middleware.ts` if needed.
-
-## AI Safety Package
-
-The `@workspace/ai-safety` package provides a composable middleware pipeline for AI-powered API routes. It chains multiple safety checks into a single function call:
-
-**Pipeline:** Rate limit → Sanitize input → Content safety check → Token budget → [Your AI call] → Filter output → Redact PII
-
-### Usage
-
-```typescript
-import { createAiSafetyMiddleware } from "@workspace/ai-safety/middleware"
-
-const safeAi = createAiSafetyMiddleware({
-  rateLimit: { maxRequests: 10, windowMs: 60_000 },
-  sanitize: { sensitivity: "medium" },
-  tokenBudget: { maxTokensPerUser: 100_000, windowMs: 3_600_000 },
-  contentSafety: { categories: ["violence", "hate_speech"] },
-  piiRedactor: { patterns: ["email", "phone", "ssn"] },
-})
-
-// In your API route handler:
-const result = await safeAi(
-  { userId: session.user.id, input: userMessage },
-  async (sanitizedInput) => {
-    // Call your AI provider here (OpenAI, Anthropic, etc.)
-    const response = await callAiProvider(sanitizedInput)
-    return { output: response.text, tokensUsed: response.usage.total_tokens }
-  }
-)
-
-if (!result.success) {
-  return Response.json({ error: result.error }, { status: 400 })
-}
-return Response.json({ message: result.output })
-```
-
-### Individual Components
-
-Each component can also be used standalone:
-
-| Module          | Import                                            | Purpose                                   |
-| --------------- | ------------------------------------------------- | ----------------------------------------- |
-| Rate Limiter    | `@workspace/ai-safety/guardrails/rate-limiter`    | Sliding window per-user rate limiting     |
-| Input Sanitizer | `@workspace/ai-safety/guardrails/input-sanitizer` | Prompt injection detection & sanitization |
-| Output Filter   | `@workspace/ai-safety/guardrails/output-filter`   | Filter sensitive patterns from AI output  |
-| Token Budget    | `@workspace/ai-safety/guardrails/token-budget`    | Per-user token usage tracking & limits    |
-| Content Safety  | `@workspace/ai-safety/moderation/content-safety`  | Content category flagging                 |
-| PII Redactor    | `@workspace/ai-safety/moderation/pii-redactor`    | Detect and redact emails, phones, SSNs    |
-
-## Accessibility Package
-
-The `@workspace/accessibility` package implements **APCA AAA 3.0** (Advanced Perceptual Contrast Algorithm), the next-generation contrast standard replacing WCAG 2.x ratios.
-
-### APCA Contrast Thresholds
-
-| Use Case           | Minimum Lc Value |
-| ------------------ | ---------------- |
-| Body text          | Lc >= 90         |
-| Large text (24px+) | Lc >= 75         |
-| Non-text UI        | Lc >= 60         |
-
-### Usage
-
-```typescript
-import { calcAPCA } from "@workspace/accessibility/apca/contrast"
-import { meetsThreshold } from "@workspace/accessibility/apca/validate"
-import { APCA_THRESHOLDS } from "@workspace/accessibility/apca/thresholds"
-
-// Calculate contrast between text and background
-const lc = calcAPCA("#1a1a1a", "#ffffff") // ~106 Lc (dark on light)
-const passes = meetsThreshold(lc, APCA_THRESHOLDS.BODY_TEXT) // true
-```
-
-### Included Components
-
-- **`SkipLink`** — "Skip to main content" link for keyboard navigation (already in root layout)
-- **`VisuallyHidden`** — Screen-reader-only text
-- **`LiveRegion`** — ARIA live region for dynamic announcements (already in root layout)
-
-### Included Hooks
-
-- **`useReducedMotion()`** — Detects `prefers-reduced-motion` media query
-- **`useFocusTrap(ref)`** — Traps focus within a container (modals, dialogs)
-- **`useAnnounce()`** — Programmatic screen reader announcements
-
-## Adding shadcn Components
+### Adding UI Components
 
 ```bash
-npx shadcn@latest add button
-npx shadcn@latest add dialog
+npx shadcn@latest add card
 npx shadcn@latest add form
 ```
 
-Components install to `packages/ui/src/components/` and are imported with the `@workspace/ui` alias:
+Then use them:
 
 ```tsx
-import { Button } from "@workspace/ui/components/button"
-import { Dialog } from "@workspace/ui/components/dialog"
+import { Card } from "@workspace/ui/components/card"
 ```
 
-## Adding a New Workspace Package
+---
 
-1. Create `packages/your-package/` with a `package.json`:
-   ```json
-   {
-     "name": "@workspace/your-package",
-     "version": "0.0.0",
-     "type": "module",
-     "private": true,
-     "exports": {
-       "./*": "./src/*.ts"
-     }
-   }
-   ```
-2. Add a `tsconfig.json` extending `@workspace/typescript-config/base.json` with `"module": "ESNext"` and `"moduleResolution": "Bundler"`
-3. Add `"@workspace/your-package": "workspace:*"` to `apps/web/package.json` dependencies
-4. Add `"@workspace/your-package"` to the `transpilePackages` array in `apps/web/next.config.mjs`
-5. Run `pnpm install`
-6. Use **extensionless imports** — do not use `.js` extensions in import paths
+## For Template Maintainers
 
-## Testing
+<details>
+<summary>Developer reference (click to expand)</summary>
 
-Tests use **Vitest** with **Testing Library** in a **jsdom** environment.
+### Tech Stack
+
+| Category      | Technology                                               |
+| ------------- | -------------------------------------------------------- |
+| Framework     | Next.js 16 (App Router, RSC, Turbopack)                  |
+| UI            | shadcn/ui + Radix UI + Tailwind CSS v4 (OKLCH)           |
+| Auth          | NextAuth v5, Google OAuth, Email OTP via Resend          |
+| Database      | SQLite via libSQL/Drizzle (local file, Turso-compatible) |
+| AI Safety     | Rate limiting, prompt injection detection, PII redaction |
+| Accessibility | APCA AAA 3.0, skip links, focus management               |
+| Monorepo      | Turborepo + pnpm workspaces                              |
+| Testing       | Vitest + Testing Library                                 |
+| CI            | GitHub Actions + Husky + lint-staged                     |
+
+### Scripts
 
 ```bash
-pnpm test             # Run all tests once
-pnpm --filter web test:watch   # Watch mode for the web app
+pnpm dev            # Dev server (localhost:11000)
+pnpm build          # Build all workspaces
+pnpm typecheck      # Type check
+pnpm lint           # Lint
+pnpm test           # Run tests
+pnpm format         # Format code
+pnpm db:push        # Push schema to SQLite
+pnpm db:studio      # Open Drizzle Studio (DB browser)
 ```
 
-### Writing Tests
+### Environment Variables
 
-Tests live in `__tests__/` directories co-located with source code:
+| Variable               | Purpose                                             |
+| ---------------------- | --------------------------------------------------- |
+| `AUTH_SECRET`          | Session encryption (auto-generated by setup wizard) |
+| `AUTH_URL`             | App URL (default: `http://localhost:11000`)         |
+| `DATABASE_URL`         | SQLite path (default: `file:./dev.db`)              |
+| `GOOGLE_CLIENT_ID`     | Google OAuth client ID                              |
+| `GOOGLE_CLIENT_SECRET` | Google OAuth client secret                          |
+| `RESEND_API_KEY`       | Resend API key for email OTP                        |
+| `EMAIL_FROM`           | Sender email for OTP codes                          |
 
-```
-apps/web/__tests__/app/page.test.tsx
-apps/web/__tests__/components/error-boundary.test.tsx
-packages/ai-safety/src/__tests__/rate-limiter.test.ts
-packages/accessibility/src/__tests__/apca-contrast.test.ts
-```
+### Docker Architecture
 
-```tsx
-import { render, screen, cleanup } from "@testing-library/react"
-import { afterEach, describe, expect, it } from "vitest"
+- Multi-stage build: install → build → standalone runner
+- Single volume (`app-data`) holds SQLite DB + saved credentials
+- `docker-entrypoint.sh` sources `/app/data/.env` before starting
+- Setup API writes credentials, then `process.exit(0)` triggers Docker restart
+- `restart: unless-stopped` ensures automatic recovery
 
-afterEach(() => cleanup()) // Required — jsdom reuses the DOM between tests
+### Auth Provider Detection
 
-describe("MyComponent", () => {
-  it("renders correctly", () => {
-    render(<MyComponent />)
-    expect(screen.getByRole("heading")).toHaveTextContent("Hello")
-  })
-})
-```
+Providers register conditionally based on env vars:
 
-### Testing Conventions
+- `GOOGLE_CLIENT_ID` + `GOOGLE_CLIENT_SECRET` → Google OAuth enabled
+- `RESEND_API_KEY` → Email OTP enabled
+- Neither → Onboarding modal shown at `/login`
 
-- Always call `cleanup()` in `afterEach` — jsdom reuses the document body across renders
-- Prefer accessible queries: `getByRole`, `getByText`, `getByLabelText` over `getByTestId`
-- Use `getAllByRole` when multiple matching elements are expected
-- Setup file at `apps/web/vitest.setup.ts` loads `@testing-library/jest-dom` matchers
+The setup API (`/api/setup`) is locked once any provider is configured.
 
-## CI/CD
+</details>
 
-### GitHub Actions
+---
 
-The CI pipeline (`.github/workflows/ci.yml`) runs on pushes to `main` and pull requests:
+## Need Help?
 
-1. Install dependencies (`pnpm install --frozen-lockfile`)
-2. Type check (`pnpm typecheck`)
-3. Lint (`pnpm lint`)
-4. Format check (`pnpm format:check`)
-5. Build (`pnpm build`)
-6. Test (`pnpm test`)
-
-### Pre-commit Hooks
-
-Husky runs lint-staged on every commit:
-
-- **TypeScript/JavaScript files** — ESLint fix + Prettier format
-- **JSON, Markdown, YAML, CSS files** — Prettier format
-
-If the pre-commit hook fails, fix the reported issues and commit again. Do not skip with `--no-verify`.
-
-## Environment Variables
-
-| Variable      | Location              | Purpose                                                 |
-| ------------- | --------------------- | ------------------------------------------------------- |
-| `AUTH_SECRET` | `apps/web/.env.local` | NextAuth session encryption key                         |
-| `AUTH_URL`    | `apps/web/.env.local` | NextAuth base URL (defaults to `http://localhost:3000`) |
-
-Generate `AUTH_SECRET` with:
-
-```bash
-openssl rand -base64 32
-```
-
-Copy `apps/web/.env.local.example` to `apps/web/.env.local` and fill in the values. Never commit `.env.local` to version control.
-
-## Customization Checklist
-
-After cloning this template for a new project:
-
-- [ ] Rename the project in `package.json` files (`sas-default-app` → your name)
-- [ ] Update `APP_NAME` and `APP_DESCRIPTION` in `apps/web/lib/constants.ts`
-- [ ] Replace the placeholder `authorize` function in `apps/web/lib/auth.ts`
-- [ ] Generate and set `AUTH_SECRET` in `apps/web/.env.local`
-- [ ] Update this README with your project-specific information
-- [ ] Remove or modify the example dashboard page
-- [ ] Configure AI safety middleware settings for your use case
-- [ ] Verify APCA contrast compliance for your color palette
-
-## Documentation
-
-- [Getting Started](docs/getting-started.md) — Setup, configuration, and first steps
-- [Architecture](docs/architecture.md) — System design, patterns, and data flow
-- [Coding Conventions](docs/coding-conventions.md) — Standards and best practices
-- [Contributing](CONTRIBUTING.md) — Branch naming, commit format, PR process
-- [Changelog](CHANGELOG.md) — Release history
-- [CLAUDE.md](CLAUDE.md) — AI assistant context for working with this codebase
+- **Something broken?** Run `docker compose logs` to see what happened
+- **Want to start over?** Run `docker compose down -v && ./start.sh`
+- **Found a bug?** [Open an issue](https://github.com/SAS-Technology-Innovation/sas-default-app/issues)

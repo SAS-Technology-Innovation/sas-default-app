@@ -46,3 +46,9 @@ Thumbs.db
 
 # Misc
 *.pem
+
+# Local SQLite DB
+*.db
+*.db-journal
+*.db-wal
+*.db-shm
