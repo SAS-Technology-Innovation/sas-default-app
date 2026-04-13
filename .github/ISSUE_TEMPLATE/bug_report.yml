@@ -1,0 +1,69 @@
+name: Bug Report
+description: Something isn't working
+labels: ["bug"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Thanks for reporting a bug. Please fill out the sections below so we can fix it quickly.
+
+  - type: textarea
+    id: what-happened
+    attributes:
+      label: What happened?
+      description: Describe what went wrong. Include screenshots if possible.
+      placeholder: When I clicked "Save and start" in the setup modal, nothing happened.
+    validations:
+      required: true
+
+  - type: textarea
+    id: expected
+    attributes:
+      label: What did you expect?
+      description: What should have happened instead?
+      placeholder: The app should have restarted and shown the login page.
+    validations:
+      required: true
+
+  - type: textarea
+    id: reproduce
+    attributes:
+      label: Steps to reproduce
+      description: How can we recreate the problem?
+      placeholder: |
+        1. Run ./start.sh
+        2. Open http://localhost:11000
+        3. Enter Google credentials in the modal
+        4. Click "Save and start"
+    validations:
+      required: true
+
+  - type: dropdown
+    id: setup
+    attributes:
+      label: How are you running the app?
+      options:
+        - Docker (./start.sh)
+        - VS Code Dev Container
+        - Local (pnpm dev)
+    validations:
+      required: true
+
+  - type: dropdown
+    id: os
+    attributes:
+      label: Operating system
+      options:
+        - Mac
+        - Windows
+        - Linux
+        - Chromebook
+    validations:
+      required: true
+
+  - type: textarea
+    id: logs
+    attributes:
+      label: Logs (if available)
+      description: Paste the output of `docker compose logs` or any error messages.
+      render: shell

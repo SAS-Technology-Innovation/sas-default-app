@@ -1,0 +1,42 @@
+name: Teacher Feedback
+description: Feedback from a teacher using the template
+labels: ["feedback", "teacher"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Thank you for sharing your experience. Your feedback helps us make the template better for everyone.
+
+  - type: textarea
+    id: experience
+    attributes:
+      label: Tell us about your experience
+      description: What were you trying to do? What worked well? What was confusing?
+      placeholder: I tried to set up the app for my class. The Docker install was straightforward, but I got confused at the Google OAuth step.
+    validations:
+      required: true
+
+  - type: dropdown
+    id: difficulty
+    attributes:
+      label: How easy was it to get the app running?
+      options:
+        - Very easy
+        - Mostly easy, a few hiccups
+        - Confusing in places
+        - I needed help from someone technical
+        - I couldn't get it running
+    validations:
+      required: true
+
+  - type: textarea
+    id: confusing
+    attributes:
+      label: What was the most confusing part?
+      description: Even small things help us improve.
+
+  - type: textarea
+    id: wishlist
+    attributes:
+      label: What would you like the template to do that it doesn't?
+      description: Features, pages, or tools that would help you or your students.

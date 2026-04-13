@@ -23,7 +23,7 @@ Install it, open it, and wait for the whale icon to stop animating. That means D
 **Option B — Clone with Git** (if you have it):
 
 ```bash
-git clone https://github.com/SAS-Technology-Innovation/sas-default-app.git
+git clone https://github.com/sas-technology/sas-default-app.git
 cd sas-default-app
 ```
 
@@ -235,4 +235,4 @@ The setup API (`/api/setup`) is locked once any provider is configured.
 
 - **Something broken?** Run `docker compose logs` to see what happened
 - **Want to start over?** Run `docker compose down -v && ./start.sh`
-- **Found a bug?** [Open an issue](https://github.com/SAS-Technology-Innovation/sas-default-app/issues)
+- **Found a bug?** [Open an issue](https://github.com/sas-technology/sas-default-app/issues)

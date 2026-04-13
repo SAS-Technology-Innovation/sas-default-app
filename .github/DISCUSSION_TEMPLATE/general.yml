@@ -1,0 +1,14 @@
+title: "[General] "
+labels: []
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Use this space for questions, ideas, or general conversation about the template.
+
+  - type: textarea
+    id: body
+    attributes:
+      label: What's on your mind?
+    validations:
+      required: true

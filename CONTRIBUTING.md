@@ -1,77 +1,133 @@
 # Contributing
 
-## Development Setup
+Thanks for your interest in contributing to the MiniApp Template. This guide is for **template maintainers and developers** who want to improve the template itself.
 
-1. Install Node.js 22+ (use `nvm install` to match `.nvmrc`)
-2. Enable pnpm: `corepack enable pnpm`
-3. Install dependencies: `pnpm install`
-4. Copy env file: `cp apps/web/.env.local.example apps/web/.env.local`
-5. Start dev server: `pnpm dev`
+If you're a teacher using the template to build an app, you don't need this file. Just run `./start.sh` and start building.
 
-## Branch Naming
+## Getting Started
 
-Use descriptive branch names with a prefix:
+```bash
+git clone https://github.com/sas-technology/sas-default-app.git
+cd sas-default-app
+corepack enable pnpm
+pnpm install
+cp apps/web/.env.local.example apps/web/.env.local
+pnpm dev
+```
 
-- `feat/description` - New features
-- `fix/description` - Bug fixes
-- `chore/description` - Maintenance tasks
-- `docs/description` - Documentation changes
+The app runs at http://localhost:11000.
 
-## Commit Messages
+## Development Workflow
 
-Follow [Conventional Commits](https://www.conventionalcommits.org/):
+### Branch Naming
+
+```
+feat/description     # New feature
+fix/description      # Bug fix
+chore/description    # Maintenance, deps, tooling
+docs/description     # Documentation only
+```
+
+### Commit Messages
+
+We use [Conventional Commits](https://www.conventionalcommits.org/):
 
 ```
 feat: add user profile page
-fix: resolve auth redirect loop
-chore: update dependencies
-docs: add deployment guide
-test: add rate limiter tests
+fix: OTP verification redirect loop
+chore: update drizzle-orm to v0.46
+docs: add VS Code setup instructions
+test: add login page integration tests
 ```
 
-## Pre-commit Hooks
+### Before Submitting a PR
 
-Husky runs lint-staged on every commit:
+Run the full check suite:
 
-- TypeScript/JavaScript files: ESLint + Prettier
-- JSON/Markdown/CSS/YAML files: Prettier
+```bash
+pnpm typecheck      # TypeScript
+pnpm lint           # ESLint
+pnpm format:check   # Prettier
+pnpm test           # Vitest
+pnpm build          # Full build (catches runtime issues)
+```
 
-If hooks fail, fix the issues before committing.
+All checks must pass. The pre-commit hook runs lint + format automatically, but `typecheck`, `test`, and `build` are your responsibility before pushing.
 
-## Pull Request Process
+### Pull Request Process
 
 1. Create a feature branch from `main`
 2. Make your changes
-3. Ensure all checks pass: `pnpm build && pnpm typecheck && pnpm lint && pnpm test`
-4. Push and create a PR using the template
-5. Request review
+3. Run the full check suite (above)
+4. Push and open a PR against `main`
+5. Fill out the PR template
+6. Wait for CI to pass and a maintainer to review
 
-## Adding Components
+## Architecture Guidelines
 
-Add new shadcn/ui components:
+Read [AGENTS.md](AGENTS.md) for the full architecture context. The key principles:
+
+### The Teacher Test
+
+Before adding or changing anything, ask: **"Would a non-technical teacher understand this?"**
+
+- If a feature needs configuration, build a UI for it. Don't add env vars and document them.
+- If a flow has more than 3 steps, simplify it.
+- If you're adding a dependency, justify it. Every dependency is complexity a teacher might encounter.
+
+### What Lives Where
+
+| Directory                   | Purpose                        | Who Changes It            |
+| --------------------------- | ------------------------------ | ------------------------- |
+| `apps/web/app/(dashboard)/` | App pages and features         | Everyone                  |
+| `apps/web/app/(auth)/`      | Auth flow (login, onboarding)  | Template maintainers      |
+| `apps/web/app/api/`         | API routes                     | Template maintainers      |
+| `apps/web/lib/`             | Core infrastructure (auth, db) | Template maintainers only |
+| `packages/ui/`              | Shared UI components           | Template maintainers      |
+| `packages/ai-safety/`       | AI safety middleware           | Template maintainers      |
+| `packages/accessibility/`   | Accessibility utilities        | Template maintainers      |
+
+### Non-Negotiables
+
+- **Docker must work.** Every change must build and run in the Docker container.
+- **Zero-config for teachers.** No manual env file editing. Use the setup wizard pattern.
+- **Accessibility.** All UI meets APCA AAA 3.0 contrast. Keyboard and screen reader support.
+- **No secrets in code.** Ever.
+- **No `any` types.** Use `unknown` and narrow.
+
+## Adding a shadcn Component
 
 ```bash
 npx shadcn@latest add <component-name>
 ```
 
-## Adding Routes
+Components install to `packages/ui/src/components/`. They're automatically available via `@workspace/ui/components/<name>`.
 
-- **Protected routes:** `apps/web/app/(dashboard)/your-route/page.tsx`
-- **Auth routes:** `apps/web/app/(auth)/your-route/page.tsx`
-- **API routes:** `apps/web/app/api/your-route/route.ts`
+## Adding a Database Table
 
-## Adding Packages
+1. Add the table to `apps/web/lib/db/schema.ts`
+2. Run `pnpm --filter web db:push` to apply
+3. Export from `apps/web/lib/db/index.ts` if needed
 
-1. Create directory under `packages/`
-2. Add `package.json` with `@workspace/` name
-3. Add `tsconfig.json` extending shared config
-4. Update `apps/web/next.config.mjs` transpilePackages if needed
-5. Add to `apps/web/package.json` dependencies
+## Testing
 
-## Accessibility
+Tests use Vitest + Testing Library. Place test files in `__tests__/` directories alongside the source.
 
-- Use APCA AAA 3.0 contrast thresholds (body text: Lc >= 90)
-- Test keyboard navigation
-- Use semantic HTML elements
-- Add ARIA attributes where needed
-- Use the `@workspace/accessibility` package utilities
+```bash
+pnpm test                          # All tests
+pnpm --filter web test:watch       # Watch mode for web app
+```
+
+Prefer accessible queries (`getByRole`, `getByText`) over test IDs. Always call `cleanup()` in `afterEach`.
+
+## Reporting Issues
+
+Use the [issue templates](https://github.com/sas-technology/sas-default-app/issues/new/choose) on GitHub. Choose the right template:
+
+- **Bug Report** — Something is broken
+- **Feature Request** — You want something new
+- **Teacher Feedback** — Feedback from a teacher using the template
+
+## Questions?
+
+Open a [Discussion](https://github.com/sas-technology/sas-default-app/discussions) on GitHub.

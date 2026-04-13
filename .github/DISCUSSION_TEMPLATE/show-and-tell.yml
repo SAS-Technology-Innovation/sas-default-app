@@ -1,0 +1,21 @@
+title: "[Show & Tell] "
+labels: []
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Built something with the template? Share it here! We'd love to see what teachers and students are creating.
+
+  - type: textarea
+    id: project
+    attributes:
+      label: What did you build?
+      description: Describe your app, what it does, and who it's for.
+    validations:
+      required: true
+
+  - type: textarea
+    id: screenshot
+    attributes:
+      label: Screenshots or links
+      description: Share a screenshot, demo link, or repo link if you'd like.

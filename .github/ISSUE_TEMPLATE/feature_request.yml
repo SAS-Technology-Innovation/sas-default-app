@@ -1,0 +1,43 @@
+name: Feature Request
+description: Suggest a new feature or improvement
+labels: ["enhancement"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Have an idea for making the template better? We'd love to hear it.
+
+  - type: textarea
+    id: problem
+    attributes:
+      label: What problem does this solve?
+      description: Describe the problem or gap you're trying to address.
+      placeholder: Teachers keep asking how to add a page where students can submit assignments.
+    validations:
+      required: true
+
+  - type: textarea
+    id: solution
+    attributes:
+      label: What would the ideal solution look like?
+      description: Describe how you'd like it to work, from a user's perspective.
+      placeholder: A pre-built "Submissions" page template that teachers can enable with one click.
+    validations:
+      required: true
+
+  - type: dropdown
+    id: audience
+    attributes:
+      label: Who is this for?
+      options:
+        - Teachers (using the app)
+        - Student developers (building on the template)
+        - Template maintainers
+    validations:
+      required: true
+
+  - type: textarea
+    id: alternatives
+    attributes:
+      label: Alternatives you've considered
+      description: Any other approaches you've thought about?
